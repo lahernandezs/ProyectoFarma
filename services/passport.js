@@ -33,7 +33,7 @@ passport.use(new GoogleStrategy({
     clientID:keys.googleClientID,
     clientSecret:keys.googleClientSecret,
     callbackURL:'/auth/google/callback',
-    proxy:true
+    proxy:"true"
 },(accessToken,refreshToken,profile,done)=>{
     console.log("probando");
     User.findOne({
@@ -59,7 +59,7 @@ passport.use(new FacebookStrategy({
     clientID:keys.facebookClientID,
     clientSecret:keys.facebookClientSecret,
     callbackURL:'/auth/facebook/callback',
-    proxy:true
+    proxy:"true"
 },(accessToken,refreshToken,profile,done)=>{
     console.log("probando");
     User.findOne({
