@@ -6,3 +6,5 @@ module.exports={
     mongooseDBURI:process.env.MONGOOSE_DB_URI,
     cookieKey:process.env.COOKIE_KEY
 }
+
+ 
