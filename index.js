@@ -1,29 +1,29 @@
 const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const model = require('./models/User');
+require('./services/passport');
+const mongoose = require('mongoose');
 const keys = require('./config/keys');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+
 
 const app=express();
 
-//para que passport entienda la estrategia. Las estrategias es el detalle de un loggin en particular
-//por ejemplo, google, fb, etc.s
-passport.use(new GoogleStrategy({
-    clientID:keys.googleClientID,
-    clientSecret:keys.googleClientSecret,
-    callbackURL:'/auth/google/callback'
-},(accessToken)=>{
-    console.log('access Token ',accessToken);
-  // console.log('refresh Token',refreshToken);
-    //console.log('profile',profile);
-}));
+//la propiedad MaxAge indica cuánto va a durar el cookie como válido (milisegundos)
+app.use(
+    cookieSession({
+        maxAge:30 * 24 * 60 * 60 * 1000,
+        keys:[keys.cookieKey]
+    })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/auth/google',passport.authenticate('google',{
-    scope:['profile','email']
-}));
+const authRoutes = require('./routes/authRoutes')(app);
 
-//app.get('/auth/google/callback/',passport.authenticate('google'));
-app.get('/auth/google/callback',(req,res)=>{
-    console.log(req);
-})
+mongoose.connect(
+    keys.mongooseDBURI
+    )
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT);
+app.listen(PORT); 
