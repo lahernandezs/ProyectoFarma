@@ -32,52 +32,42 @@ passport.deserializeUser((id,done)=>{
 passport.use(new GoogleStrategy({
     clientID:keys.googleClientID,
     clientSecret:keys.googleClientSecret,
-    callbackURL:'/auth/google/callback',
-    proxy:"true"
-},(accessToken,refreshToken,profile,done)=>{
-    console.log("probando");
-    User.findOne({
+    callbackURL:'/auth/google/callback'
+},async (accessToken,refreshToken,profile,done)=>{
+    
+    var existingUser = await User.findOne({
         googleId:profile.id
     })
-    .then((existingUser)=>{
-        if(existingUser){
-            //Ya existe el usuario en la BD
-            console.log(existingUser);
-        }
-        else{
-            //En caso de no existir, se crea uno nuevo
-            new User({
-                googleId:profile.id
-            }).save()
-            .then(user => done(null,user));
-        }
-        done(null,existingUser);
-    })
-}));
+    
+    if(existingUser){
+        //Ya existe el usuario en la BD
+        return done(null,existingUser);
+    }
+   
+    //En caso de no existir, se crea uno nuevo
+    var user = await new User({googleId:profile.id,credits:0}).save();
+    done(null,user);
+}
+));
 
 passport.use(new FacebookStrategy({
     clientID:keys.facebookClientID,
     clientSecret:keys.facebookClientSecret,
-    callbackURL:'/auth/facebook/callback',
-    proxy:"true"
-},(accessToken,refreshToken,profile,done)=>{
-    console.log("probando");
-    User.findOne({
+    callbackURL:'/auth/facebook/callback'
+},async (accessToken,refreshToken,profile,done)=>{
+    
+    var existingUser = await User.findOne({
         facebookId:profile.id
-    })
-    .then((existingUser)=>{
-        if(existingUser){
-            //Ya existe el usuario en la BD
-            console.log(existingUser);
-        }
-        else{
-            //En caso de no existir, se crea uno nuevo
-            new User({
-                facebookId:profile.id
-            }).save()
-            .then(user => done(null,user));
-        }
-        done(null,existingUser);
-    })
+    });
+   
+    if(existingUser){
+        //Ya existe el usuario en la BD
+        return done(null,existingUser);
+    }
+   
+    //En caso de no existir, se crea uno nuevo
+    var user = await new User({facebookId:profile.id,credits:0}).save();
+    done(null,user);
+        
     })
 );

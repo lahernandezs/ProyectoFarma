@@ -4,7 +4,9 @@ module.exports={
     facebookClientID:process.env.FACEBOOK_CLIENT_ID,
     facebookClientSecret:process.env.FACEBOOK_CLIENT_SECRET,
     mongooseDBURI:process.env.MONGOOSE_DB_URI,
-    cookieKey:process.env.COOKIE_KEY
+    cookieKey:process.env.COOKIE_KEY,
+    stripePublishableKey:process.env.STRIPE_PUBLISHABLE_KEY,
+    stripeSecretKey:process.env.STRIPE_SECRET_KEY
 }
 
  
