@@ -1,6 +1,9 @@
 const express = require('express');
-const model = require('./models/User');
+const users = require('./models/User');
 require('./services/passport');
+const model1 = require('./models/Product');
+const drugstoreModel = require('./models/Drugstore');
+const laboratoryModel = require('./models/Laboratory');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const cookieSession = require('cookie-session');
@@ -20,8 +23,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-const authRoutes = require('./routes/authRoutes')(app);
-const billingRoutes = require('./routes/billingRoutes')(app);
+
+const authRoutes = require('./controllers/authRoutes')(app);
+const billingRoutes = require('./controllers/billingRoutes')(app);
+const productRoutes = require('./controllers/productRoutes')(app);
+const drugstoreRoutes = require('./controllers/drugstoreRoutes')(app);
+const laboratoryRoutes = require('./controllers/laboratoryRoutes')(app);
 
 mongoose.connect(
     keys.mongooseDBURI

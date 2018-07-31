@@ -14,7 +14,7 @@ class Billing extends Component{
                 token = {token=>this.props.handleToken(token)}
                 stripeKey = {process.env.REACT_APP_STRIPE_KEY}
                 currency= "USD">
-                <button className="btn" style={{backgroundColor:"blue"}}>
+                <button className="btn btn-outline-success my-2 my-sm-0 pull-right" type="submit">
                 Buy Credits
                 </button>
             </StripeCheckout>          

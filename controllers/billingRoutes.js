@@ -3,7 +3,8 @@ var express = require('express');
 var router = express.Router();
 var keys = require('../config/keys');
 var stripe = require('stripe')(keys.stripeSecretKey);
-const requireLogin = require('../middlewares/requireLogin')
+const requireLogin = require('../middlewares/requireLogin');
+var productService = require('../services/productService');
 
 
 module.exports = app =>{

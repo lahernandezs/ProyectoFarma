@@ -1,52 +1,67 @@
-import React,{Component} from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import Billing from './Billing';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Navbar, Nav, NavDropdown, MenuItem, NavItem } from 'react-bootstrap';
 
-class Header extends Component{
-    renderContent(){
-        switch(this.props.auth.auth){
+/**
+ * Encabezado del menu
+ * TODO: Colocar que se arme automático el menú
+ */
+class Header extends Component {
+    renderContent() {
+        switch (this.props.auth.authReducer) {
             case null:
-                return ; 
+                return;
             case false:
-                return   [
-                            <li>
-                                <a href="/auth/google">Login with Google</a>
-                            </li>,
-                            <li>
-                                <a href="/auth/facebook">Login with Facebook</a>
-                            </li>
-                        ]
+                return(
+                    <Nav>
+                        <NavItem eventKey={1} href="/auth/google">
+                            Login with Google
+                        </NavItem>
+                        <NavItem eventKey={2} href="/auth/facebook">
+                            Login with Facebook
+                        </NavItem>
+                    </Nav>);
             default:
-                return   [
-                            <li key ="1">
-                                <Billing/>
-                            </li>,
-                            <li key ="2" style={{margin:"0 10px"}}>
-                                <span>Credits: {this.props.auth.auth.credits} </span>
-                             </li>,
-                            <li key="3">
-                                <a href="/api/logout">Logout</a>
-                            </li>
-                        ]
-                        
-        }
-    } 
-    render(){
-            return(
-                <nav>
-                    <div className="nav-wrapper">
-                            <Link to={this.props.auth.auth?'/surveys':'/'} className="left brand-logo">
-                                Emaily
-                            </Link>
-                            <ul className="right">
-                                {this.renderContent()}  
-                            </ul>   
-                    </div>
-                </nav>
-                )
+                return(
+                    <Navbar.Collapse>
+                        <Nav>
+                            <NavDropdown eventKey={3} title="Productos" id="basic-nav-dropdown">
+                                <MenuItem eventKey={3.1} href="/product/create">Crear Productos</MenuItem>
+                                <MenuItem eventKey={3.2} href="/product/select">Gestionar Laboratorios</MenuItem>
+                            </NavDropdown>
+                            <NavDropdown eventKey={4} title="Droguerías" id="basic-nav-dropdown">
+                                <MenuItem eventKey={4.1} href="/drugstore/create">Crear Droguería</MenuItem>
+                                <MenuItem eventKey={4.2} href="/drugstore/select">Gestionar Laboratorios</MenuItem>
+                            </NavDropdown>
+                            <NavDropdown eventKey={5} title="Laboratorios" id="basic-nav-dropdown">
+                                <MenuItem eventKey={5.1} href="/laboratory/create">Crear Laboratorio</MenuItem>
+                                <MenuItem eventKey={5.2} href="/laboratory/select">Gestionar Laboratorios</MenuItem>
+                            </NavDropdown>
+                        </Nav>
+                        <Nav pullRight>
+                            <NavItem eventKey={1} href="/api/logout">
+                                Logout
+                    </NavItem>
+
+                        </Nav>
+                    </Navbar.Collapse>
+                );
         }
     }
+    render() {
+        return (
+            <Navbar inverse collapseOnSelect>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <a href="/api/laboratories"><span className="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> FarmApp</a>
+                    </Navbar.Brand>
+                </Navbar.Header>
+                {this.renderContent()}
+            </Navbar>
+
+        )
+    }
+}
 
 /**
  * Funcion necesaria para hacer el mapeo del state en el front
@@ -56,8 +71,8 @@ class Header extends Component{
  *                  * false cuando el user no está logueado
  *                  * objeto de usuario cuando está autenticado.             
  */
-function mapStateToProps(auth){
-    return {auth }
+function mapStateToProps(auth) {
+    return { auth }
 }
 
 export default connect(mapStateToProps)(Header);
